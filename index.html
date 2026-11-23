@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NewtGrid | Building Community, Not an Audience</title>
+  <meta name="description" content="NewtGrid — Create. Connect. Convert. Building community, not an audience." />
+
+  <!-- Custom NG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230F382A'/%3E%3Cpath d='M22 72V34c0-5 6-7 10-3l24 26c4 4 10 2 10-3V32H48v10h10v10L34 26c-6-6-16-2-16 6v40h4z' fill='%23DCAC58'/%3E%3Cpath d='M54 32h24v8H54zM66 52h12v14c0 6-5 10-12 10H48c-5 0-9-2-12-5l6-6c2 2 4 3 7 3h15c3 0 6-2 6-5v-3H66v-8z' fill='%23DCAC58'/%3E%3C/svg%3E" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            flame: '#FF5500',
+            cream: '#FAF3EB',
+            ink: '#0A0A0A',
+            pine: '#0F382A',
+            gold: '#DCAC58',
+          },
+          fontFamily: {
+            display: ['Anton', 'Impact', 'sans-serif'],
+            body: ['Archivo', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Archivo', sans-serif;
+      background-color: #FFFFFF;
+      color: #0A0A0A;
+      overflow-x: hidden;
+    }
+
+    /* Kinetic Marquees */
+    @keyframes marqueeLeft {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes marqueeRight {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0%); }
+    }
+    .animate-marquee-left {
+      display: flex;
+      width: max-content;
+      animation: marqueeLeft 28s linear infinite;
+    }
+    .animate-marquee-right {
+      display: flex;
+      width: max-content;
+      animation: marqueeRight 32s linear infinite;
+    }
+    .animate-marquee-fast {
+      display: flex;
+      width: max-content;
+      animation: marqueeLeft 18s linear infinite;
+    }
+
+    /* 3D Perspective Reel Wall */
+    .perspective-stage {
+      perspective: 1100px;
+    }
+    .curved-wall {
+      transform: rotateX(6deg);
+      transform-style: preserve-3d;
+    }
+
+    /* Semicircle bottom cutout pattern for service cards */
+    .scallop-bottom {
+      position: relative;
+    }
+    .scallop-bottom::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 16px;
+      background-image: radial-gradient(circle at 16px 16px, #FFFFFF 12px, transparent 13px);
+      background-size: 32px 16px;
+      background-repeat: repeat-x;
+    }
+
+    /* Realistic 3D Open-Book Magazine */
+    .book-viewport {
+      perspective: 2200px;
+    }
+    .open-book {
+      position: relative;
+      transform-style: preserve-3d;
+      box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.55);
+    }
+    .book-spine-shadow {
+      background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0.06) 46%,
+        rgba(0,0,0,0.28) 50%,
+        rgba(0,0,0,0.06) 54%,
+        rgba(0,0,0,0) 100%
+      );
+    }
+    .flip-leaf {
+      transform-origin: left center;
+      transition: transform 0.75s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transform-style: preserve-3d;
+    }
+    .flipping-forward {
+      transform: rotateY(-165deg);
+    }
+    .flipping-backward {
+      transform: rotateY(165deg);
+    }
+
+    /* Preloader fade */
+    #preloader {
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #preloader.hidden-loader {
+      opacity: 0;
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-flame selection:text-white">
+
+  <!-- PRELOADER WITH NEWTGRID SUBMARK -->
+  <div id="preloader" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+    <div class="w-24 h-24 rounded-full bg-pine flex items-center justify-center shadow-2xl animate-bounce">
+      <svg viewBox="0 0 120 80" class="w-16 h-12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 64V24C16 17 24 14 29 19L61 52C66 57 74 54 74 47V22" stroke="#DCAC58" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M74 22H98M86 44H104V55C104 62 98 66 90 66H62C55 66 50 63 46 58" stroke="#DCAC58" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="mt-4 text-xs font-bold tracking-[0.25em] uppercase text-pine">NewtGrid</p>
+  </div>
+
+  <!-- STICKY NAVIGATION BAR -->
+  <header class="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-4 transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between bg-ink/85 backdrop-blur-md border border-white/10 rounded-full px-5 py-2.5 shadow-xl">
+      <!-- Brand Logo -->
+      <a href="#top" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-lg bg-pine flex items-center justify-center border border-gold/30 shrink-0">
+          <svg viewBox="0 0 120 80" class="w-7 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 64V24C16 17 24 14 29 19L61 52C66 57 74 54 74 47V22" stroke="#DCAC58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M74 22H98M86 44H104V55C104 62 98 66 90 66H62C55 66 50 63 46 58" stroke="#DCAC58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="font-body font-extrabold text-xl tracking-tight">
+          <span class="text-white">Newt</span><span class="text-gold">Grid</span>
+        </span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-white/80">
+        <a href="#manifesto" class="hover:text-flame transition">Manifesto</a>
+        <a href="#services" class="hover:text-flame transition">Services</a>
+        <a href="#playbook" class="hover:text-flame transition">Playbook</a>
+        <a href="#inquiry" class="hover:text-flame transition">Send Inquiry</a>
+        <a href="#magazine" class="hover:text-flame transition">Magazine</a>
+      </nav>
+
+      <!-- Right CTA Button -->
+      <a href="https://wa.me/918799522703?text=Hi%20NewtGrid!%20I%20want%20to%20grow%20my%20brand." target="_blank" rel="noopener noreferrer"
+         class="bg-white text-ink hover:bg-flame hover:text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-md">
+        Let's Talk
+      </a>
+    </div>
+  </header>
+
+  <!-- SECTION 1: HERO WITH 3D CURVED PERSPECTIVE REEL WALL -->
+  <section id="top" class="relative min-h-screen bg-black text-white flex flex-col justify-end overflow-hidden pt-28 pb-16">
+    <!-- 3D Curved Visual Reel Wall -->
+    <div class="absolute inset-0 perspective-stage flex items-center justify-center opacity-75 pointer-events-none">
+      <div class="curved-wall animate-marquee-left gap-4 px-4">
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative">
+          <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80" alt="Social Media Content" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative translate-y-6">
+          <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&w=600&q=80" alt="Creator Studio" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative -translate-y-4">
+          <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=600&q=80" alt="Video Editing" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative translate-y-4">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="Performance Marketing" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative -translate-y-6">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80" alt="Creative Campaigns" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <!-- Duplicate Set for Seamless Loop -->
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative">
+          <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80" alt="Social Media Content" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative translate-y-6">
+          <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&w=600&q=80" alt="Creator Studio" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="w-48 sm:w-60 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/15 shrink-0 relative -translate-y-4">
+          <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=600&q=80" alt="Video Editing" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Vignette Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/60 pointer-events-none"></div>
+
+    <!-- Hero Headline -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <div class="inline-flex items-center gap-2 bg-flame/20 border border-flame/50 text-flame px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-widest mb-5">
+        <span class="w-2 h-2 rounded-full bg-flame animate-ping"></span>
+        Building Community, Not an Audience
+      </div>
+      <h1 class="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl uppercase tracking-tight leading-[0.95] text-white drop-shadow-2xl">
+        Create. Connect. <span class="text-flame">Convert.</span>
+      </h1>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScPJh12Q-c8wUhiueqve8Knwpy5zuIEZj5O6kGs46k5ePxxGw/viewform?usp=dialog"
+           target="_blank" rel="noopener noreferrer"
+           class="bg-flame hover:bg-orange-600 text-white font-extrabold text-sm sm:text-base px-8 py-4 rounded-full shadow-lg shadow-flame/30 transition transform hover:-translate-y-0.5">
+          Send Inquiry →
+        </a>
+        <a href="#services" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold text-sm sm:text-base px-8 py-4 rounded-full border border-white/20 transition">
+          Explore Capabilities
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: SPLIT-SCREEN MANIFESTO -->
+  <section id="manifesto" class="grid grid-cols-1 lg:grid-cols-2 min-h-[85vh]">
+    <!-- Left Warm Cream Panel -->
+    <div class="bg-cream flex items-center justify-center p-10 sm:p-16 relative overflow-hidden">
+      <div class="relative max-w-md w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-ink/10">
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=80"
+             alt="NewtGrid Digital Strategy"
+             class="w-full h-[460px] object-cover" />
+        <div class="absolute bottom-4 left-4 right-4 bg-ink/90 backdrop-blur-md text-white p-4 rounded-2xl flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-widest text-gold font-bold">NewtGrid Ethos</p>
+            <p class="text-sm font-semibold">Strategy-First. Zero Legacy Bloat.</p>
+          </div>
+          <span class="w-10 h-10 rounded-full bg-flame flex items-center justify-center font-display text-lg">NG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Vibrant Orange Panel -->
+    <div class="bg-flame text-white flex flex-col justify-center p-10 sm:p-16 lg:p-24">
+      <p class="text-xs font-extrabold uppercase tracking-[0.25em] text-black/70 mb-4">Our Core Belief</p>
+      <h2 class="font-display text-4xl sm:text-6xl lg:text-7xl uppercase leading-[1.02] tracking-tight mb-6">
+        New Wave.<br/>Deep Knowledge.<br/>One Belief:
+      </h2>
+      <p class="text-xl sm:text-2xl font-bold leading-relaxed text-white/95 max-w-xl">
+        "Building community, not an audience. Passive views fade overnight—high-trust communities compound into unstoppable brands."
+      </p>
+      <div class="mt-8 pt-8 border-t border-white/25 flex flex-wrap gap-6 text-sm font-bold uppercase tracking-wider">
+        <span>01. Create</span>
+        <span>•</span>
+        <span>02. Connect</span>
+        <span>•</span>
+        <span>03. Convert</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: ALL 10 SERVICES -->
+  <section id="services" class="py-24 px-4 sm:px-8 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <p class="text-xs font-extrabold uppercase tracking-[0.25em] text-flame mb-3">Full-Stack Growth Capabilities</p>
+        <h2 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-ink leading-tight">
+          Things we're <span class="font-display uppercase text-flame tracking-normal">Magnificent</span> At Doing
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <!-- 1. Social Media Management -->
+        <div class="bg-ink text-white rounded-3xl p-8 pb-12 scallop-bottom shadow-xl transform hover:-rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-gold">01 / Core</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Social Media Management</h3>
+          <p class="text-white/80 text-sm leading-relaxed">End-to-end profile architecture, content calendars, and daily community management that turns followers into superfans.</p>
+        </div>
+
+        <!-- 2. Creative Campaigns to Grow Brand -->
+        <div class="bg-cream text-ink rounded-3xl p-8 pb-12 scallop-bottom shadow-lg border border-ink/5 transform hover:rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-pine">02 / Brand</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Creative Campaigns to Grow Brand</h3>
+          <p class="text-ink/80 text-sm leading-relaxed">Thumb-stopping viral concepts and culturally sharp brand launches engineered to spark real conversation.</p>
+        </div>
+
+        <!-- 3. Performance Marketing -->
+        <div class="bg-ink text-white rounded-3xl p-8 pb-12 scallop-bottom shadow-xl transform hover:-rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-gold">03 / Scale</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Performance Marketing</h3>
+          <p class="text-white/80 text-sm leading-relaxed">Data-obsessed acquisition engines built to scale ROAS, lower customer acquisition cost, and drive predictable revenue.</p>
+        </div>
+
+        <!-- 4. Meta Ads -->
+        <div class="bg-cream text-ink rounded-3xl p-8 pb-12 scallop-bottom shadow-lg border border-ink/5 transform hover:rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-pine">04 / Paid Social</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Meta Ads</h3>
+          <p class="text-ink/80 text-sm leading-relaxed">High-converting Instagram and Facebook ad creatives paired with precision audience testing and retargeting funnels.</p>
+        </div>
+
+        <!-- 5. Google Ads -->
+        <div class="bg-ink text-white rounded-3xl p-8 pb-12 scallop-bottom shadow-xl transform hover:-rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-gold">05 / Paid Search</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Google Ads</h3>
+          <p class="text-white/80 text-sm leading-relaxed">High-intent Search, Display, and YouTube campaigns capturing ready-to-buy customers the exact moment they search.</p>
+        </div>
+
+        <!-- 6. SEO & SEO Marketing -->
+        <div class="bg-cream text-ink rounded-3xl p-8 pb-12 scallop-bottom shadow-lg border border-ink/5 transform hover:rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-pine">06 / Organic Search</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">SEO & SEO Marketing</h3>
+          <p class="text-ink/80 text-sm leading-relaxed">Technical search optimization, authority building, and organic content ecosystems that rank on Google and compound over time.</p>
+        </div>
+
+        <!-- 7. Designing -->
+        <div class="bg-ink text-white rounded-3xl p-8 pb-12 scallop-bottom shadow-xl transform hover:-rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-gold">07 / Visuals</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Designing</h3>
+          <p class="text-white/80 text-sm leading-relaxed">Bold brand identities, scroll-stopping carousels, ad creatives, and visual systems that command instant authority.</p>
+        </div>
+
+        <!-- 8. Editing -->
+        <div class="bg-cream text-ink rounded-3xl p-8 pb-12 scallop-bottom shadow-lg border border-ink/5 transform hover:rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-pine">08 / Post-Production</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Editing</h3>
+          <p class="text-ink/80 text-sm leading-relaxed">High-retention short-form reels, dynamic pacing, crisp sound design, and color grading engineered for maximum watch time.</p>
+        </div>
+
+        <!-- 9. Content Writing -->
+        <div class="bg-ink text-white rounded-3xl p-8 pb-12 scallop-bottom shadow-xl transform hover:-rotate-1 transition duration-300">
+          <span class="text-xs font-bold uppercase tracking-widest text-gold">09 / Copy</span>
+          <h3 class="font-display text-3xl text-flame uppercase tracking-wide mt-2 mb-3">Content Writing</h3>
+          <p class="text-white/80 text-sm leading-relaxed">Sharp viral hooks, persuasive ad copy, brand storytelling, and conversion-focused scripts written to make people act.</p>
+        </div>
+
+        <!-- 10. Digital Marketing -->
+        <div class="md:col-span-2 lg:col-span-3 bg-flame text-white rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-black/75">10 / 360° Ecosystem</span>
+            <h3 class="font-display text-3xl sm:text-5xl uppercase tracking-wide mt-1 mb-2">Full-Funnel Digital Marketing</h3>
+            <p class="text-white/95 text-sm sm:text-base max-w-2xl">Uniting organic community building, performance ads, SEO, and high-retention creative into one seamless growth engine.</p>
+          </div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScPJh12Q-c8wUhiueqve8Knwpy5zuIEZj5O6kGs46k5ePxxGw/viewform?usp=dialog"
+             target="_blank" rel="noopener noreferrer"
+             class="bg-ink text-white hover:bg-white hover:text-ink font-extrabold text-sm px-7 py-4 rounded-full transition shrink-0">
+            Send Inquiry →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: PLAYFUL DUAL-ROW MARQUEE -->
+  <section class="py-16 bg-cream border-y border-ink/10 overflow-hidden">
+    <p class="text-center text-xs font-extrabold uppercase tracking-[0.25em] text-ink/60 mb-8">
+      Things we're... ah... not so great at...
+    </p>
+    <div class="space-y-4">
+      <div class="animate-marquee-left gap-8 text-2xl sm:text-4xl text-ink">
+        <span>Buying fake followers</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Boring corporate decks</strong><span class="text-flame">•</span>
+        <span>Chasing empty vanity metrics</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Slow agency turnarounds</strong><span class="text-flame">•</span>
+        <span>Cookie-cutter templates</span><span class="text-flame">•</span>
+        <span>Buying fake followers</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Boring corporate decks</strong><span class="text-flame">•</span>
+        <span>Chasing empty vanity metrics</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Slow agency turnarounds</strong><span class="text-flame">•</span>
+      </div>
+      <div class="animate-marquee-right gap-8 text-2xl sm:text-4xl text-ink">
+        <strong class="font-extrabold">Gatekeeping strategy</strong><span class="text-flame">•</span>
+        <span>Making 90-second ads that feel like ads</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Waiting weeks to reply</strong><span class="text-flame">•</span>
+        <span>Ignoring community feedback</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Gatekeeping strategy</strong><span class="text-flame">•</span>
+        <span>Making 90-second ads that feel like ads</span><span class="text-flame">•</span>
+        <strong class="font-extrabold">Waiting weeks to reply</strong><span class="text-flame">•</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: KNOWLEDGE-FIRST PLAYBOOK SHOWCASE -->
+  <section id="playbook" class="bg-black text-white py-24 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 mb-12">
+      <p class="text-flame font-bold uppercase tracking-[0.2em] text-xs mb-3">Zero Legacy Bloat • Pure Execution Science</p>
+      <h2 class="text-3xl sm:text-5xl font-extrabold max-w-3xl leading-tight">
+        A new-age agency powered by deep platform intelligence and conversion psychology.
+      </h2>
+    </div>
+
+    <div class="border-y border-white/15 py-5 mb-16 overflow-hidden">
+      <div class="animate-marquee-left gap-10 font-display text-6xl sm:text-8xl uppercase tracking-wider text-white/90">
+        <span>OUR PLAYBOOK</span><span class="text-flame">•</span>
+        <span>CREATE. CONNECT. CONVERT.</span><span class="text-flame">•</span>
+        <span>OUR PLAYBOOK</span><span class="text-flame">•</span>
+        <span>CREATE. CONNECT. CONVERT.</span><span class="text-flame">•</span>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 divide-y divide-white/15">
+      <div class="py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center group">
+        <div class="md:col-span-3">
+          <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&w=600&q=80"
+               alt="Create Phase" class="w-full h-36 object-cover rounded-2xl border border-white/15 group-hover:scale-105 transition" />
+        </div>
+        <div class="md:col-span-4">
+          <span class="text-xs font-bold text-flame uppercase tracking-widest">Phase 01</span>
+          <h3 class="font-display text-3xl sm:text-4xl uppercase mt-1">NewtGrid × Create</h3>
+        </div>
+        <div class="md:col-span-5">
+          <p class="text-white/75 text-sm sm:text-base">High-retention reel architecture, scroll-stopping visual design, and thumb-stopping hook psychology engineered for organic reach.</p>
+        </div>
+      </div>
+
+      <div class="py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center group">
+        <div class="md:col-span-3">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80"
+               alt="Connect Phase" class="w-full h-36 object-cover rounded-2xl border border-white/15 group-hover:scale-105 transition" />
+        </div>
+        <div class="md:col-span-4">
+          <span class="text-xs font-bold text-flame uppercase tracking-widest">Phase 02</span>
+          <h3 class="font-display text-3xl sm:text-4xl uppercase mt-1">NewtGrid × Connect</h3>
+        </div>
+        <div class="md:col-span-5">
+          <p class="text-white/75 text-sm sm:text-base">Building community, not an audience—turning passive viewers into loyal advocates through interactive storytelling and active social management.</p>
+        </div>
+      </div>
+
+      <div class="py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center group">
+        <div class="md:col-span-3">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80"
+               alt="Convert Phase" class="w-full h-36 object-cover rounded-2xl border border-white/15 group-hover:scale-105 transition" />
+        </div>
+        <div class="md:col-span-4">
+          <span class="text-xs font-bold text-flame uppercase tracking-widest">Phase 03</span>
+          <h3 class="font-display text-3xl sm:text-4xl uppercase mt-1">NewtGrid × Convert</h3>
+        </div>
+        <div class="md:col-span-5">
+          <p class="text-white/75 text-sm sm:text-base">Precision Meta Ads, Google Ads, and SEO funnels that convert community trust into measurable, scalable revenue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: SEND INQUIRY BANNER (DIRECT GOOGLE FORM LINK, ZERO ON-SITE FORM) -->
+  <section id="inquiry" class="relative py-28 bg-white overflow-hidden">
+    <!-- Animated Ticker Ribbon Behind Headline -->
+    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 -rotate-3 bg-ink text-white py-3.5 shadow-xl opacity-95 pointer-events-none">
+      <div class="animate-marquee-fast gap-8 font-bold text-sm sm:text-base uppercase tracking-widest">
+        <span>NewtGrid Brand & Creator Partnerships</span><span class="text-flame">★</span>
+        <span>Create • Connect • Convert • Send Your Inquiry Today</span><span class="text-flame">★</span>
+        <span>NewtGrid Brand & Creator Partnerships</span><span class="text-flame">★</span>
+        <span>Create • Connect • Convert • Send Your Inquiry Today</span><span class="text-flame">★</span>
+      </div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center bg-white/95 backdrop-blur-sm py-12 rounded-3xl border border-ink/10 shadow-2xl">
+      <span class="inline-block bg-cream text-pine font-extrabold text-xs uppercase tracking-[0.2em] px-4 py-1.5 rounded-full mb-4">
+        Ready to Scale Your Brand?
+      </span>
+      <h2 class="font-display text-5xl sm:text-7xl md:text-8xl uppercase tracking-tight text-ink leading-none">
+        Let's Build Your <span class="text-flame">Community</span>
+      </h2>
+      <p class="mt-5 text-ink/75 text-base sm:text-lg max-w-2xl mx-auto font-medium">
+        Share your project details, campaign goals, or service requirements through our quick inquiry form and our team will connect with you right away.
+      </p>
+      <div class="mt-8">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScPJh12Q-c8wUhiueqve8Knwpy5zuIEZj5O6kGs46k5ePxxGw/viewform?usp=dialog"
+           target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-3 bg-flame hover:bg-orange-600 text-white font-extrabold text-base sm:text-lg px-10 py-5 rounded-full shadow-xl shadow-flame/35 transition transform hover:scale-105">
+          Send Inquiry →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: REALISTIC 3D OPEN-BOOK MAGAZINE -->
+  <section id="magazine" class="py-24 px-4 sm:px-8 bg-flame text-white">
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="text-xs font-extrabold uppercase tracking-[0.25em] text-black/75 mb-2">Interactive Brand Lookbook</p>
+      <h2 class="font-display text-4xl sm:text-6xl uppercase tracking-tight mb-2">The NewtGrid Book</h2>
+      <p class="text-sm font-bold uppercase tracking-widest text-white/90 mb-10">
+        Click the right or left page to flip through the book
+      </p>
+
+      <!-- Realistic Two-Page Open Book Spread -->
+      <div class="book-viewport max-w-5xl mx-auto">
+        <div id="open-book-container" class="open-book rounded-2xl sm:rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2 min-h-[460px] sm:min-h-[520px] border-4 border-ink/90 bg-cream text-ink text-left relative">
+
+          <!-- Center Book Spine Shadow (Desktop) -->
+          <div class="hidden md:block absolute inset-y-0 left-1/2 -translate-x-1/2 w-12 book-spine-shadow z-20 pointer-events-none"></div>
+
+          <!-- LEFT PAGE (Click to Go Previous Page) -->
+          <div id="book-left-page" onclick="prevSpread()"
+               class="cursor-pointer p-8 sm:p-12 flex flex-col justify-between relative select-none transition-colors duration-300 bg-cream text-ink hover:bg-white/90">
+            <!-- Top Header -->
+            <div class="flex items-center justify-between border-b border-current/15 pb-3 text-xs font-bold uppercase tracking-widest opacity-70">
+              <span>NewtGrid • Issue 01</span>
+              <span id="left-page-num">Page 01</span>
+            </div>
+
+            <!-- Left Page Dynamic Body -->
+            <div id="left-page-body" class="my-6">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Bottom Navigation Hint -->
+            <div class="flex items-center justify-between pt-3 border-t border-current/15 text-xs font-bold uppercase tracking-wider opacity-75">
+              <span>← Previous Page</span>
+              <span>Create. Connect. Convert.</span>
+            </div>
+          </div>
+
+          <!-- RIGHT PAGE (Click to Flip Forward) -->
+          <div id="book-right-page" onclick="nextSpread()"
+               class="flip-leaf cursor-pointer p-8 sm:p-12 flex flex-col justify-between relative select-none transition-colors duration-300 bg-ink text-white border-t-2 md:border-t-0 md:border-l border-black/20">
+            <!-- Top Header -->
+            <div class="flex items-center justify-between border-b border-current/15 pb-3 text-xs font-bold uppercase tracking-widest opacity-75">
+              <span id="right-page-tag" class="text-gold">The Manifesto</span>
+              <span id="right-page-num">Page 02</span>
+            </div>
+
+            <!-- Right Page Dynamic Body -->
+            <div id="right-page-body" class="my-6">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Bottom Page Curl Hint -->
+            <div class="flex items-center justify-between pt-3 border-t border-current/15 text-xs font-bold uppercase tracking-wider">
+              <span class="opacity-70">Building Community</span>
+              <span class="text-flame">Flip Page →</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Book Page Dots / Controls Below -->
+        <div class="mt-6 flex items-center justify-center gap-3">
+          <button onclick="prevSpread()" class="bg-ink/85 hover:bg-ink text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full transition">
+            ← Prev
+          </button>
+          <span id="spread-indicator" class="text-xs font-extrabold uppercase tracking-widest bg-black/25 px-4 py-2 rounded-full">
+            Spread 1 of 3
+          </span>
+          <button onclick="nextSpread()" class="bg-ink hover:bg-white hover:text-ink text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full transition">
+            Next Page →
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRE-FOOTER KINETIC WATERMARK -->
+  <div class="bg-black py-6 overflow-hidden border-t border-white/10">
+    <div class="animate-marquee-left gap-12 font-display text-6xl sm:text-8xl uppercase text-white/10 select-none">
+      <span>NewtGrid</span><span>•</span>
+      <span>Create. Connect. Convert.</span><span>•</span>
+      <span>NewtGrid</span><span>•</span>
+      <span>Building Community Not an Audience</span><span>•</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-flame text-white pt-16 pb-10 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-white/25">
+        <!-- Brand Column -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-11 h-11 rounded-xl bg-pine flex items-center justify-center shadow-md">
+              <svg viewBox="0 0 120 80" class="w-8 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 64V24C16 17 24 14 29 19L61 52C66 57 74 54 74 47V22" stroke="#DCAC58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M74 22H98M86 44H104V55C104 62 98 66 90 66H62C55 66 50 63 46 58" stroke="#DCAC58" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="font-body font-extrabold text-2xl tracking-tight">
+              <span class="text-white">Newt</span><span class="text-pine">Grid</span>
+            </span>
+          </div>
+          <p class="text-white/95 font-bold text-base mb-1">Create. Connect. Convert.</p>
+          <p class="text-white/85 text-sm">Building community, not an audience.</p>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div>
+          <h4 class="font-extrabold uppercase tracking-widest text-xs text-black/75 mb-4">Navigation</h4>
+          <ul class="space-y-2.5 text-sm font-bold">
+            <li><a href="#manifesto" class="hover:underline">Our Manifesto</a></li>
+            <li><a href="#services" class="hover:underline">10 Core Services</a></li>
+            <li><a href="#playbook" class="hover:underline">Execution Playbook</a></li>
+            <li><a href="#magazine" class="hover:underline">Interactive Book</a></li>
+            <li>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScPJh12Q-c8wUhiueqve8Knwpy5zuIEZj5O6kGs46k5ePxxGw/viewform?usp=dialog"
+                 target="_blank" rel="noopener noreferrer" class="underline text-ink">
+                Send Inquiry →
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Direct Contact -->
+        <div>
+          <h4 class="font-extrabold uppercase tracking-widest text-xs text-black/75 mb-4">Direct Connect</h4>
+          <ul class="space-y-3 text-sm font-bold">
+            <li>
+              <span class="block text-xs uppercase text-black/70">Phone / WhatsApp</span>
+              <a href="https://wa.me/918799522703" target="_blank" rel="noopener noreferrer" class="text-lg hover:underline">
+                +91 87995 22703
+              </a>
+            </li>
+            <li>
+              <span class="block text-xs uppercase text-black/70">Email</span>
+              <a href="mailto:newtgrid.media@gmail.com" class="text-base hover:underline">
+                newtgrid.media@gmail.com
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-bold text-white/85 gap-4">
+        <p>© 2026 NewtGrid Media. All rights reserved.</p>
+        <p>Create • Connect • Convert</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE SCRIPTS -->
+  <script>
+    // Hide Preloader smoothly
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('preloader').classList.add('hidden-loader');
+      }, 650);
+    });
+
+    // Realistic Two-Page Book Spreads Data
+    const spreads = [
+      {
+        indicator: 'Spread 1 of 3',
+        leftNum: 'Page 01',
+        rightNum: 'Page 02',
+        rightTag: 'Cover Story',
+        leftBg: 'bg-cream text-ink',
+        rightBg: 'bg-ink text-white',
+        leftHtml: `
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-12 h-12 rounded-full bg-pine flex items-center justify-center shadow-md">
+              <span class="font-extrabold text-gold text-base">NG</span>
+            </div>
+            <div>
+              <p class="text-xs font-extrabold uppercase tracking-widest text-pine">NewtGrid Media</p>
+              <p class="text-xs text-ink/60">2026 Agency Edition</p>
+            </div>
+          </div>
+          <h3 class="font-display text-4xl sm:text-5xl uppercase leading-none text-ink mb-4">
+            Building Community,<br/><span class="text-flame">Not an Audience.</span>
+          </h3>
+          <p class="text-ink/80 text-sm sm:text-base leading-relaxed">
+            In an era of infinite scrolling, attention is cheap—trust is priceless. We build magnetic digital ecosystems that turn casual viewers into fiercely loyal brand advocates.
+          </p>
+        `,
+        rightHtml: `
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-flame mb-3">Chapter 01 • The Shift</p>
+          <h3 class="font-display text-4xl sm:text-5xl uppercase leading-tight mb-4">
+            Views Don't Pay Bills.<br/><span class="text-gold">Connection Does.</span>
+          </h3>
+          <p class="text-white/80 text-sm sm:text-base leading-relaxed mb-5">
+            Traditional agencies obsess over hollow vanity impressions. NewtGrid engineers high-retention content, culturally sharp campaigns, and community-first storytelling that actually moves the needle.
+          </p>
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-wider text-gold">
+            "Create to stop the scroll. Connect to earn trust. Convert to scale."
+          </div>
+        `
+      },
+      {
+        indicator: 'Spread 2 of 3',
+        leftNum: 'Page 03',
+        rightNum: 'Page 04',
+        rightTag: 'Full-Stack Engine',
+        leftBg: 'bg-pine text-white',
+        rightBg: 'bg-cream text-ink',
+        leftHtml: `
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-gold mb-3">Chapter 02 • Creative Craft</p>
+          <h3 class="font-display text-4xl sm:text-5xl uppercase leading-tight mb-4">
+            Designing, Editing &<br/><span class="text-flame">Content Writing.</span>
+          </h3>
+          <p class="text-white/85 text-sm sm:text-base leading-relaxed">
+            Every frame, headline, and carousel is crafted for maximum retention. From high-pacing short-form reel editing to persuasive ad copywriting and bold visual design, your brand looks unmistakable everywhere.
+          </p>
+        `,
+        rightHtml: `
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-flame mb-3">Chapter 03 • Paid & Organic Scale</p>
+          <h3 class="font-display text-4xl sm:text-5xl uppercase leading-tight text-ink mb-4">
+            Meta Ads, Google Ads<br/><span class="text-pine">& SEO Marketing.</span>
+          </h3>
+          <p class="text-ink/80 text-sm sm:text-base leading-relaxed">
+            Organic community fuels paid performance. We pair high-converting Meta & Google ad campaigns with compounding SEO marketing so your brand dominates both social feeds and search results.
+          </p>
+        `
+      },
+      {
+        indicator: 'Spread 3 of 3',
+        leftNum: 'Page 05',
+        rightNum: 'Back Cover',
+        rightTag: 'Work With Us',
+        leftBg: 'bg-cream text-ink',
+        rightBg: 'bg-ink text-white',
+        leftHtml: `
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-flame mb-3">Chapter 04 • The NewtGrid Edge</p>
+          <h3 class="font-display text-4xl sm:text-5xl uppercase leading-tight text-ink mb-4">
+            Fresh Perspective.<br/><span class="text-pine">Zero Legacy Bloat.</span>
+          </h3>
+          <p class="text-ink/80 text-sm sm:text-base leading-relaxed">
+            No slow corporate layers or recycled templates. You work directly with strategists, editors, and media buyers obsessed with growing your brand from day one.
+          </p>
+        `,
+        rightHtml: `
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-gold mb-3">Start Your Growth Journey</p>
+          <h3 class="font-display text-4xl sm:text-5xl uppercase leading-tight mb-4">
+            Create. Connect.<br/><span class="text-flame">Convert.</span>
+          </h3>
+          <p class="text-white/80 text-sm mb-6">
+            WhatsApp: +91 87995 22703<br/>
+            Email: newtgrid.media@gmail.com
+          </p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScPJh12Q-c8wUhiueqve8Knwpy5zuIEZj5O6kGs46k5ePxxGw/viewform?usp=dialog"
+             target="_blank" rel="noopener noreferrer"
+             onclick="event.stopPropagation()"
+             class="inline-block bg-flame text-white font-extrabold text-sm px-7 py-3.5 rounded-full hover:bg-orange-600 transition shadow-lg">
+            Send Inquiry →
+          </a>
+        `
+      }
+    ];
+
+    let currentSpread = 0;
+
+    function renderSpread(index) {
+      const s = spreads[index];
+      const leftPage = document.getElementById('book-left-page');
+      const rightPage = document.getElementById('book-right-page');
+
+      leftPage.className = `cursor-pointer p-8 sm:p-12 flex flex-col justify-between relative select-none transition-colors duration-300 ${s.leftBg}`;
+      rightPage.className = `flip-leaf cursor-pointer p-8 sm:p-12 flex flex-col justify-between relative select-none transition-colors duration-300 border-t-2 md:border-t-0 md:border-l border-black/20 ${s.rightBg}`;
+
+      document.getElementById('left-page-num').textContent = s.leftNum;
+      document.getElementById('right-page-num').textContent = s.rightNum;
+      document.getElementById('right-page-tag').textContent = s.rightTag;
+      document.getElementById('spread-indicator').textContent = s.indicator;
+
+      document.getElementById('left-page-body').innerHTML = s.leftHtml;
+      document.getElementById('right-page-body').innerHTML = s.rightHtml;
+    }
+
+    function nextSpread() {
+      const rightPage = document.getElementById('book-right-page');
+      rightPage.classList.add('flipping-forward');
+      setTimeout(() => {
+        currentSpread = (currentSpread + 1) % spreads.length;
+        renderSpread(currentSpread);
+        rightPage.classList.remove('flipping-forward');
+      }, 280);
+    }
+
+    function prevSpread() {
+      const rightPage = document.getElementById('book-right-page');
+      rightPage.classList.add('flipping-backward');
+      setTimeout(() => {
+        currentSpread = (currentSpread - 1 + spreads.length) % spreads.length;
+        renderSpread(currentSpread);
+        rightPage.classList.remove('flipping-backward');
+      }, 280);
+    }
+
+    // Initialize first book spread on load
+    renderSpread(0);
+  </script>
+</body>
+</html>
